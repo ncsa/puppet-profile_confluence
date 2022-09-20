@@ -3,9 +3,14 @@
 # Add backup script and configuration files to crontab
 #
 class profile_confluence {
+
+# Ensure that directory is present
+
   file { [ '/etc/confluence/', '/etc/confluence/backup' ]:
     ensure => directory,
   }
+
+# Common file parameters
 
   File {
     group => 'wheel',
@@ -15,6 +20,8 @@ class profile_confluence {
     ensure  => 'file',
     replace => 'no',
   }
+
+# Backup script and configuration files
 
 #  file { '/etc/confluence/backup/wiki-backup.sh':
 #    source => 'puppet:///files/wiki-backup.sh',
