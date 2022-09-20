@@ -17,13 +17,13 @@ class profile_confluence {
   }
 
   file { '/etc/confluence/backup/wiki-backup.sh':
-    source => 'puppet:///wiki-backup.sh',
+    source => 'puppet:///files/wiki-backup.sh',
   }
   file { '/etc/confluence/backup/confluence-backup.conf':
-    source => 'puppet:///backup.conf',
+    source => 'puppet:///files/backup.conf',
   }
   file { '/etc/confluence/backup/confluence-db.conf':
-    source => 'puppet:///confluence-db.conf',
+    source => 'puppet:///files/confluence-db.conf',
   }
 
 }
