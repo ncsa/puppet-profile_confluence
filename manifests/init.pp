@@ -16,14 +16,14 @@ class profile_confluence {
     replace => 'no',
   }
 
-  file { '/etc/confluence/backup/wiki-backup.sh':
-    source => 'puppet:///files/wiki-backup.sh',
-  }
-  file { '/etc/confluence/backup/confluence-backup.conf':
-    source => 'puppet:///files/backup.conf',
-  }
-  file { '/etc/confluence/backup/confluence-db.conf':
-    source => 'puppet:///files/confluence-db.conf',
-  }
+#  file { '/etc/confluence/backup/wiki-backup.sh':
+#    source => 'puppet:///files/wiki-backup.sh',
+#  }
+#  file { '/etc/confluence/backup/confluence-backup.conf':
+#    source => 'puppet:///files/backup.conf',
+#  }
+#  file { '/etc/confluence/backup/confluence-db.conf':
+#    source => 'puppet:///files/confluence-db.conf',
+#  }
 
 }
