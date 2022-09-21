@@ -7,7 +7,7 @@ class profile_confluence {
 
   file { '/root/cron_scripts/':
     ensure  => directory,
-    source  => "puppet:///modules/${module_name}/root/cron_scripts",
+    source  => "puppet:///modules/${module_name}/root/cron_scripts/",
     recurse => true,
   }
 
