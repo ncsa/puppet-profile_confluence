@@ -3,34 +3,18 @@
 # Add backup script and configuration files to crontab
 #
 class profile_confluence {
+# Recursively copy all backup files
 
-# Ensure that directory is present
-
-  file { [ '/etc/confluence/', '/etc/confluence/backup' ]:
-    ensure => directory,
+  file { '/root/cron_scripts/':
+    ensure  => directory,
+    source  => "puppet:///modules/${module_name}/root/cron_scripts",
+    recurse => true,
   }
 
-# Common file parameters
-
-  File {
-    group => 'wheel',
-    owner => 'root',
-    mode  => '0655',
-    require => File['/etc/confluence/backup'],
-    ensure  => 'file',
-    replace => 'no',
+  cron { 'confluence_backup':
+    command     => '/root/cron_scripts/wiki-backup.sh',
+    user        => 'root',
+    hour        => 1,
+    environment => ['SHELL=/bin/sh', 'MAILTO=meberger@illinois.edu'],
   }
-
-# Backup script and configuration files
-
-#  file { '/etc/confluence/backup/wiki-backup.sh':
-#    source => 'puppet:///files/wiki-backup.sh',
-#  }
-#  file { '/etc/confluence/backup/confluence-backup.conf':
-#    source => 'puppet:///files/backup.conf',
-#  }
-#  file { '/etc/confluence/backup/confluence-db.conf':
-#    source => 'puppet:///files/confluence-db.conf',
-#  }
-
 }
