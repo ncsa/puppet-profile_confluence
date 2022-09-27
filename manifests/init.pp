@@ -7,7 +7,7 @@ class profile_confluence {
 
 
   $config_files = [
-    '/root/cron_scripts/confluence-backup.conf',
+    '{/root/cron_scripts/confluence-backup.conf}',
     '/root/cron_scripts/confluence-db.conf',
   ]
 
