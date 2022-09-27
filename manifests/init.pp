@@ -22,10 +22,10 @@ class profile_confluence {
       mode => '0660',
       source  => "puppet:///modules/${module_name}${name}",
       ;
-    defaults:
+    default:
       ensure => file,
-      owner  => root,
-      group => root,
+      owner  => 'root',
+      group => 'root',
       ;
   }
 
