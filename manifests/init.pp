@@ -22,7 +22,7 @@ class profile_confluence {
       ;
     defaults:
       ensure => file,
-      user  => root,
+      owner  => root,
       group => root,
       source  => "puppet:///modules/${module_name}${name}",
       ;
@@ -30,7 +30,7 @@ class profile_confluence {
 
   cron { 'confluence_backup':
     command     => '/root/cron_scripts/wiki-backup.sh',
-    user        => 'root',
+    owner        => 'root',
     hour        => 1,
     environment => ['SHELL=/bin/sh', 'MAILTO=meberger@illinois.edu'],
   }
