@@ -7,7 +7,7 @@ class profile_confluence {
 
 
   $config_files = [
-    '{/root/cron_scripts/confluence-backup.conf}',
+    '/root/cron_scripts/confluence-backup.conf',
     '/root/cron_scripts/confluence-db.conf',
   ]
 
@@ -21,7 +21,7 @@ class profile_confluence {
       mode => '0660',
       ;
     default:
-      ensure => file,
+      ensure => template,
       owner  => 'root',
       group => 'root',
       source  => "puppet:///modules/${module_name}",
