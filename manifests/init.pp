@@ -24,7 +24,7 @@ class profile_confluence {
       ensure => file,
       owner  => 'root',
       group => 'root',
-      source  => "puppet:///modules/${module_name}${title}",
+      source  => "puppet:///modules/${module_name}",
       ;
   }
 
