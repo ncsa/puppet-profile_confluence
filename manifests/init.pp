@@ -16,16 +16,15 @@ class profile_confluence {
   file {
     $config_files:
       mode => '0440',
-      source  => "puppet:///modules/${module_name}${name}",
       ;
     $cron_files:
       mode => '0660',
-      source  => "puppet:///modules/${module_name}${name}",
       ;
     default:
       ensure => file,
       owner  => 'root',
       group => 'root',
+      source  => "puppet:///modules/${module_name}",
       ;
   }
 
