@@ -13,15 +13,22 @@ class profile_confluence {
 
   $cron_files = [ '/root/cron_scripts/wiki-backup.sh' ]
 
-  file {
-    $config_files:
-      mode => '0440',
-      ;
-    $cron_files:
-      mode   => '0660',
-      ensure => file,
-      ;
+  #  file {
+    #  $config_files:
+    #  mode => '0440',
+    #  ;
+    #$cron_files:
+    # mode   => '0660',
+    #  ;
+    file {"/var/tmp/testfile":
+        ensure => "present",
+        owner => "root",
+        group => "root",
+        mode => "664",
+        content => "This is a test file created using puppet",.
+}
     default:
+      ensure => file,
       owner  => 'root',
       group => 'root',
       source  => "puppet:///modules/${module_name}",
