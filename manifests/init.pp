@@ -18,7 +18,8 @@ class profile_confluence {
       mode => '0440',
       ;
     $cron_files:
-      mode => '0660',
+      mode   => '0660',
+      ensure => file,
       ;
     default:
       ensure => template,
