@@ -12,12 +12,12 @@ class profile_confluence {
 
   $cron_files = ['/root/cron_scripts/wiki-backup.sh']
 
-  file { '/var/tmp/testfile':
+  file { $config_files:
     ensure => file,
     owner  => 'root',
     group  => 'root',
     mode   => '0664',
-    source => "puppet:///modules/${module_name}/testfile.txt",
+    source => "puppet:///modules/${module_name}/${title}",
   }
 
   cron { 'confluence_backup':
