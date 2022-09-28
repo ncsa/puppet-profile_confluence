@@ -25,7 +25,7 @@ class profile_confluence {
         owner => "root",
         group => "root",
         mode => "664",
-        content => "This is a test file created using puppet",.
+        content => "This is a test file created using puppet.".
 }
     default:
       ensure => file,
