@@ -5,33 +5,20 @@
 class profile_confluence {
 # Recursively copy all backup files
 
-
   $config_files = [
     '/root/cron_scripts/confluence-backup.conf',
     '/root/cron_scripts/confluence-db.conf',
   ]
 
-  $cron_files = [ '/root/cron_scripts/wiki-backup.sh' ]
+  $cron_files = ['/root/cron_scripts/wiki-backup.sh']
 
-  #  file {
-    #  $config_files:
-    #  mode => '0440',
-    #  ;
-    #$cron_files:
-    # mode   => '0660',
-    #  ;
-    file {"/var/tmp/testfile":
-       owner => "root",
-       group => "root",
-       mode => "664",
-       content => "This is a test file created using puppet.",
-       ;
-    default:
-      ensure => file,
-      owner  => 'root',
-      group => 'root',
-      source  => "puppet:///modules/${module_name}",
-      ;
+  file { '/var/tmp/testfile':
+    ensure  => file,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0664',
+    content => 'This is a test file created using puppet.',
+    ;
   }
 
   cron { 'confluence_backup':
@@ -41,5 +28,3 @@ class profile_confluence {
     environment => ['SHELL=/bin/sh', 'MAILTO=meberger@illinois.edu'],
   }
 }
-
-
