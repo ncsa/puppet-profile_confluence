@@ -21,11 +21,11 @@ class profile_confluence {
     # mode   => '0660',
     #  ;
     file {"/var/tmp/testfile":
-        ensure => "present",
-        owner => "root",
-        group => "root",
-        mode => "664",
-        content => "This is a test file created using puppet.",
+       owner => "root",
+       group => "root",
+       mode => "664",
+       content => "This is a test file created using puppet.",
+       ;
     default:
       ensure => file,
       owner  => 'root',
