@@ -13,7 +13,8 @@ class profile_confluence {
   $cron_files = ['/root/cron_scripts/wiki-backup.sh']
 
   $config_files.each |String $fname| {
-    file { $fnameg :
+    file {
+      $fname :
       ensure => file,
       owner  => 'root',
       group  => 'root',
