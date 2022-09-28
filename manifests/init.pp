@@ -17,7 +17,8 @@ class profile_confluence {
     owner  => 'root',
     group  => 'root',
     mode   => '0664',
-    source => "puppet:///modules/${module_name}",
+    source => "puppet:///modules/${module_name}$(path}",
+    type   => file,
   }
 
   cron { 'confluence_backup':
