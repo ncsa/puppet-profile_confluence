@@ -19,16 +19,17 @@ class profile_confluence {
         owner  => 'root',
         group  => 'root',
         mode   => '0440',
-        source => "puppet:///modules/${module_name}/$fname",
+        source => "puppet:///modules/${module_name}/${fname}",
     }
   }
-    file {
-      $cron_files:
+  file {
+    $cron_files :
       ensure => file,
       owner  => 'root',
       group  => 'root',
-      mode  => '0660'
-      source => "puppet:///modules/${module_name}/$cron_files",
+      mode   => '0660',
+      source => "puppet:///modules/${module_name}${cron_files}",
+  }
 
   cron { 'confluence_backup':
     command     => '/root/cron_scripts/wiki-backup.sh',
