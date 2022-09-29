@@ -10,7 +10,7 @@ class profile_confluence {
     '/root/cron_scripts/confluence-db.conf',
   ]
 
-  $cron_files = ['/root/cron_scripts/wiki-backup.sh']
+  $cron_file = '/root/cron_scripts/wiki-backup.sh'
 
   $config_files.each |String $fname| {
     file {
@@ -28,11 +28,11 @@ class profile_confluence {
       owner  => 'root',
       group  => 'root',
       mode   => '0660',
-      source => "puppet:///modules/${module_name}${cron_files}",
+      source => "puppet:///modules/${module_name}/${cron_file}",
   }
 
   cron { 'confluence_backup':
-    command     => '/root/cron_scripts/wiki-backup.sh',
+    command      => '/root/cron_scripts/wiki-backup.sh',
     user        => 'root',
     hour        => 1,
     environment => ['SHELL=/bin/sh', 'MAILTO=meberger@illinois.edu'],
