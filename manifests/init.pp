@@ -3,7 +3,8 @@
 # Add backup script and configuration files to crontab
 #
 class profile_confluence {
-# Recursively copy all backup files
+# Loop through backup configuration files
+# Then copy over backup script
 
   $config_files = [
     '/root/cron_scripts/confluence-backup.conf',
@@ -23,7 +24,7 @@ class profile_confluence {
     }
   }
   file {
-    $cron_files :
+    $cron_file :
       ensure => file,
       owner  => 'root',
       group  => 'root',
@@ -32,7 +33,7 @@ class profile_confluence {
   }
 
   cron { 'confluence_backup':
-    command      => '/root/cron_scripts/wiki-backup.sh',
+    command     => '/root/cron_scripts/wiki-backup.sh',
     user        => 'root',
     hour        => 1,
     environment => ['SHELL=/bin/sh', 'MAILTO=meberger@illinois.edu'],
