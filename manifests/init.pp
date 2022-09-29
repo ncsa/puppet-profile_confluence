@@ -15,13 +15,11 @@ class profile_confluence {
   $config_files.each |String $fname| {
     file {
       $fname :
-      ensure => file,
-      owner  => 'root',
-      group  => 'root',
-      mode   => '0664',
-      #      source => "puppet:///modules/${module_name}",
-      target => "/root/cron_scripts/${fname}",
-      type   => file,
+        ensure => file,
+        owner  => 'root',
+        group  => 'root',
+        mode   => '0664',
+        source => "puppet:///modules/${module_name}/$fname",
     }
   }
 
