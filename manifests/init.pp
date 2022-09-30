@@ -28,7 +28,7 @@ class profile_confluence {
       ensure => file,
       owner  => 'root',
       group  => 'root',
-      mode   => '0660',
+      mode   => '0710',
       source => "puppet:///modules/${module_name}/${cron_file}",
   }
 
