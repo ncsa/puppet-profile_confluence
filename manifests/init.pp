@@ -35,7 +35,8 @@ class profile_confluence {
   cron { 'confluence_backup':
     command     => '/root/cron_scripts/wiki-backup.sh',
     user        => 'root',
-    hour        => 1,
+    hour        => 2,
+    minute      => 14,
     environment => ['SHELL=/bin/sh', 'MAILTO=meberger@illinois.edu'],
   }
 }
