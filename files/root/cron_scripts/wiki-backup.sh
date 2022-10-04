@@ -1,15 +1,13 @@
 #!/bin/sh
-#
-# Stop Confluence service
-
-/etc/init.d/confluence stop
 
 # Configure backup location and folder list
 
-SCRIPT_DIR=/etc/confluence/backup
-BACKUPS="/backups"
-CONFIG=${1:-/etc/confluence/backup/confluence-backup.conf}
-EMAILFILEPATH=${SCRIPT_DIR}"/Daily_File_Backup_Report.log"
+SCRIPT_DIR=/root/cron_scripts
+BACKUPS="//var/confluence/backups"
+CONFIG=${1:-/root/cron_scripts/confluence-backup.conf}
+EMAILFILEPATH=${BACKUPS}"/Daily_File_Backup_Report.log"
+
+set -x
 
 # Read list of folders from config file
 
@@ -19,42 +17,21 @@ then
   exit
 fi
 
-cp /dev/null $EMAILFILEPATH
-echo "------------------------------------------------------------------------------------" >> $EMAILFILEPATH
-
 # Loop through folders list
 # rsync does incremental backups
 
 for FOLDER in $(< $CONFIG);
 do
-# debug information
-  echo "Backup $FOLDER" >> $EMAILFILEPATH
   DATE=`date "+%Y-%m-%dT%H_%M_%S"` >> $EMAILFILEPATH
-  echo "To $BACKUPS-$DATE" >> $EMAILFILEPATH
-  echo "Rsync -azPpq --delete --link-dest=$BACKUPS/$FOLDERcurrent $FOLDER $BACKUPS/incomplete-$DATE" >> $EMAILFILEPATH
-
   rsync -azPpq --delete --link-dest=$BACKUPS/$FOLDERcurrent $FOLDER $BACKUPS/incomplete-$DATE
 
 # Rsync is complete. Move backups to dated folder.
-
-echo "------------------------------------------------------------------------------------" >> $EMAILFILEPATH
-
-# debug information
-  echo "Move $BACKUPS/incomplete-$DATE $BACKUPS/current/$DATE" >> $EMAILFILEPATH
-  echo "Delete $BACKUPS/incomplete-$DATE" >> $EMAILFILEPATH
-  echo "Link $BACKUPScompleted/$DATE $BACKUPS$FOLDERcurrent" >> $EMAILFILEPATH
 
   mv $BACKUPS/incomplete-$DATE $BACKUPS/completed/$DATE
   rm -f $BACKUPS/incomplete-$DATE 
   ln -s $BACKUPS/completed/$DATE $BACKUPS$FOLDERcurrent 
 
 done
-
-# Restart Confluence service
-
-echo "------------------------------------------------------------------------------------" >> $EMAILFILEPATH
-echo "Starting Confluence service." >> $EMAILFILEPATH
-/etc/init.d/confluence start
 
 # Send notification of backup status
 
@@ -65,13 +42,13 @@ echo "Confluence filesystem backup complete."
 # Backup Confluence database.
 
 # mysql database backups
-# Can restore individual databases provided database is created and all users exist.
 
 BACKUP_DIR=$BACKUPS/data
-DBCONFIG=${1:-/etc/confluence/backup/conf-db.conf}
+DBCONFIG=${1:-/root/cron_scripts/conf-db.conf}
+mkdir -p $BACKUP_DIR
 
 # Initalize static parameters
-SCRIPT_DIR=/etc/confluence/backup
+SCRIPT_DIR=/root/cron_files
 USER=confluence_wiki_user
 CFPASSFILE=/etc/confluence/backup/.cfpass
 EMAILFILEPATH=${SCRIPT_DIR}"/Daily_Data_Backup_Report.log"
@@ -90,20 +67,11 @@ then
   exit
 fi
 
-cp /dev/null $EMAILFILEPATH
-echo "------------------------------------------------------------------------------------" >> $EMAILFILEPATH
-echo "Password is in $CFPASSFILE" >> $EMAILFILEPATH
-
 # loop through databases
 
 for DATABASE in $(< $DBCONFIG);
 do
-# debug information
-  echo "Backup Database $DATABASE" >> $EMAILFILEPATH
   DATE=`date "+%Y-%m-%dT%H_%M_%S"`
-  echo "User is $USER" >> $EMAILFILEPATH
-  echo "$CFPASSFILE has the password." >> $EMAILFILEPATH
-  echo "To ${BACKUP_DIR}/${DATABASE}-${DATE}.sql" >> $EMAILFILEPATH
 #
   /usr/local/mysql/bin/mysqldump --hex-blob --routines --triggers --default-character-set=utf8 ncsa_wiki > $BACKUP_DIR.dump`date +%d%b%y | tr A-Z a-z`.sql
 
@@ -127,11 +95,7 @@ do
 		echo "Fail to backup the ${DB} database " >> $EMAILFILEPATH	
 	fi
 
-	echo "------------------------------------------------------------------------------------" >> $EMAILFILEPATH
-
 done
-
-echo "------------------------------------------------------------------------------------" >> $EMAILFILEPATH
 
 echo "Confluence database backup complete."
 
@@ -141,4 +105,3 @@ echo "Confluence database backup complete."
 
 ### end of the file ###
 exit
-
