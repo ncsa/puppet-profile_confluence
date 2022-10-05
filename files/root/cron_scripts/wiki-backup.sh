@@ -45,7 +45,7 @@ echo "Confluence filesystem backup complete."
 # mysql database backups
 
 BACKUP_DIR=$BACKUPS/data
-DBCONFIG=${1:-/root/cron_scripts/conf-db.conf}
+DBCONFIG=${1:-/root/cron_scripts/confluence-db.conf}
 mkdir -p $BACKUP_DIR
 
 # Initalize static parameters
@@ -99,10 +99,6 @@ do
 done
 
 echo "Confluence database backup complete."
-
-# Send notification of backup status
-
-/bin/mail -s "Daily Backup for Database Service" meberger@illinois.edu <  $EMAILFILEPATH
 
 ### end of the file ###
 exit
