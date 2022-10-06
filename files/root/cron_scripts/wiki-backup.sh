@@ -33,16 +33,9 @@ do
   ln -s $BACKUPS/completed/$DATE $BACKUPS$FOLDERcurrent 
 
 done
-
-# Send notification of backup status
-
-/bin/mail -s "Daily Backup for Confluence Service" meberger@illinois.edu < $EMAILFILEPATH
-
 echo "Confluence filesystem backup complete."
 
 # Backup Confluence database.
-
-# mysql database backups
 
 BACKUP_DIR=$BACKUPS/data
 DBCONFIG=${1:-/root/cron_scripts/confluence-db.conf}
@@ -74,7 +67,7 @@ for DATABASE in $(< $DBCONFIG);
 do
   DATE=`date "+%Y-%m-%dT%H_%M_%S"`
 #
-  /usr/local/mysql/bin/mysqldump --hex-blob --routines --triggers --default-character-set=utf8 ncsa_wiki > $BACKUP_DIR.dump`date +%d%b%y | tr A-Z a-z`.sql
+  /usr/bin/mysqldump --hex-blob --routines --triggers --default-character-set=utf8 ncsa_wiki > $BACKUP_DIR.dump`date +%d%b%y | tr A-Z a-z`.sql
 
     # Check for success
 
