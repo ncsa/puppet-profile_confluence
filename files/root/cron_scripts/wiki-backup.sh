@@ -3,7 +3,7 @@
 # Configure backup location and folder list
 
 SCRIPT_DIR=/root/cron_scripts
-BACKUPS="/var/confluence/backups"
+BACKUPS="/backups"
 CONFIG=${1:-/root/cron_scripts/confluence-backup.conf}
 EMAILFILEPATH=${BACKUPS}"/Daily_File_Backup_Report.log"
 
