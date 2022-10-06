@@ -74,7 +74,7 @@ for DATABASE in $(< $DBCONFIG);
 do
   DATE=`date "+%Y-%m-%dT%H_%M_%S"`
 #
-  /usr/local/mysql/bin/mysqldump --hex-blob --routines --triggers --default-character-set=utf8 ncsa_wiki > $BACKUP_DIR.dump`date +%d%b%y | tr A-Z a-z`.sql
+  /usr/bin/mysqldump --hex-blob --routines --triggers --default-character-set=utf8 ncsa_wiki > $BACKUP_DIR.dump`date +%d%b%y | tr A-Z a-z`.sql
 
     # Check for success
 
