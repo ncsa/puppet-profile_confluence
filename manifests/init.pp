@@ -9,6 +9,7 @@ class profile_confluence {
   $config_files = [
     '/root/cron_scripts/confluence-backup.conf',
     '/root/cron_scripts/confluence-db.conf',
+    '/etc/my.cnf',
   ]
 
   $cron_file = '/root/cron_scripts/wiki-backup.sh'
