@@ -1,0 +1,8 @@
+Create File Test
+file { '/var/tmp/testfile':                                                        
+ 15     ensure => file,                                                                  
+ 16     owner  => 'root',                                                                
+ 17     group  => 'root',                                                                
+ 18     mode   => '0664',                                                                
+ 19     source => "puppet:///modules/${module_name}/testfile.txt",                       
+ 20   }    
