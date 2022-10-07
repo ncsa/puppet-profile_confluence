@@ -42,7 +42,7 @@ DBCONFIG=${1:-/root/cron_scripts/confluence-db.conf}
 mkdir -p $BACKUP_DIR
 
 # Initalize static parameters
-SCRIPT_DIR=/root/cron_files
+SCRIPT_DIR=/root/cron_scripts
 USER=confluence_wiki_user
 CFPASSFILE=/etc/confluence/backup/.cfpass
 EMAILFILEPATH=${SCRIPT_DIR}"/Daily_Data_Backup_Report.log"
