@@ -1,1 +1,7 @@
---- {}
+---
+profile_confluence::db_name: 'confluencedb'
+profile_confluence::db_user: 'confluencedb_user'
+profile_confluence::confluence_home: '/srv/confluence/home'
+profile_confluence::backup_dir: '/backups'
+profile_confluence::backups_max_qty: 15
+profile_confluence::maintenance_allowed_ips: []
