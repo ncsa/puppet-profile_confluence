@@ -8,7 +8,7 @@
 #
 # @param db_password Password for $db_user to access the database
 #
-# @param jira_home Jira [shared] home, absolute filesystem path
+# @param confluence_home Jira [shared] home, absolute filesystem path
 #
 # @param backup_dir Absolute path where backups should go
 #
@@ -16,7 +16,7 @@
 #
 # @example
 #   include profile_confluence
-class profile_confluence {
+class profile_confluence (
   String  $db_name,
   String  $db_user,
   String  $db_password,
@@ -24,7 +24,6 @@ class profile_confluence {
   String  $backup_dir,
   Integer $backups_max_qty,
 ) {
-
   $cron_params = {
     hour   => 4,
     minute => 4,
