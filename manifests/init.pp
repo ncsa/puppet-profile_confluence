@@ -50,7 +50,7 @@ class profile_confluence (
   $pwdhash = postgresql::postgresql_password( $db_user, $db_password )
   postgresql::server::role { $db_user :
     password_hash => $pwdhash,
-    createdb      => true,
+    superuser     => true,
     db            => $db_name,
   }
 
