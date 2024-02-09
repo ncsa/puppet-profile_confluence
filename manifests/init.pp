@@ -1,43 +1,94 @@
-# @summary Backup for Confluence Database
+# @summary Prepare a server for running Confluence 
 #
-# Add backup script and configuration files to crontab
+# Prepare a server for running Confluence
 #
-class profile_confluence {
-# Loop through backup configuration files
-# Then copy over backup script
+# @param db_name Database name
+#
+# @param db_user Authorized user to access the database
+#
+# @param db_password Password for $db_user to access the database
+#
+# @param confluence_home Confluence [shared] home, absolute filesystem path
+#
+# @param backup_dir Absolute path where backups should go
+#
+# @param backups_max_qty Keep this many backups
+#
+# @example
+#   include profile_confluence
+class profile_confluence (
+  String  $db_name,
+  String  $db_user,
+  String  $db_password,
+  String  $confluence_home,
+  String  $backup_dir,
+  Integer $backups_max_qty,
+) {
+  include lvm
+  include profile_website
 
-  $config_files = [
-    '/root/cron_scripts/confluence-backup.conf',
-    '/root/cron_scripts/confluence-db.conf',
-    '/etc/my.cnf',
-  ]
-
-  $cron_file = '/root/cron_scripts/wiki-backup.sh'
-
-  $config_files.each |String $fname| {
-    file {
-      $fname :
-        ensure => file,
-        owner  => 'root',
-        group  => 'root',
-        mode   => '0440',
-        source => "puppet:///modules/${module_name}/${fname}",
-    }
+  $cron_params = {
+    hour   => 4,
+    minute => 4,
+    user   => 'root',
   }
-  file {
-    $cron_file :
-      ensure => file,
-      owner  => 'root',
-      group  => 'root',
-      mode   => '0710',
-      source => "puppet:///modules/${module_name}/${cron_file}",
+
+  # This seems to be the only way to interact with postgresql::globals
+  # but install fails regardless
+  # class { 'postgresql::globals':
+  #   manage_dnf_module =>  true,
+  #   manage_package_repo =>  true,
+  #   version =>  '15',
+  # }
+
+  ### Postgres setup
+  class { 'postgresql::server':
+    backup_enable  => true,
+    backup_options => {
+      dir         => "${backup_dir}/postgres",
+      db_user     => 'postgres_backup_user',
+      db_password => $db_password,
+      time        => [$cron_params[hour], $cron_params[minute]],
+      manage_user => true,
+      rotate      => $backups_max_qty,
+    },
   }
 
-  cron { 'confluence_backup':
-    command     => '/root/cron_scripts/wiki-backup.sh',
-    user        => 'root',
-    hour        => 2,
-    minute      => 14,
-    environment => ['SHELL=/bin/sh', 'MAILTO=meberger@illinois.edu'],
+  postgresql::server::database { $db_name :
+    comment  => 'Confluence',
+    encoding => 'UNICODE',
+  }
+
+  $pwdhash = postgresql::postgresql_password( $db_user, $db_password )
+  postgresql::server::role { $db_user :
+    password_hash => $pwdhash,
+    createdb      => true,
+    db            => $db_name,
+  }
+
+  postgresql::server::grant { $db_name :
+    privilege => 'ALL',
+    db        => $db_name,
+    role      => $db_user,
+  }
+
+  ### Confluence Backups
+  $confluence_backup = '/root/cron_scripts/confluence-backup.sh'
+  file { $confluence_backup :
+    ensure  => file,
+    mode    => '0700',
+    owner   => 'root',
+    group   => '0',
+    content => epp("profile_confluence/${confluence_backup}.epp", {
+        confluence_home  => $confluence_home,
+        backup_dir => "${backup_dir}/confluencehome",
+        rotate     => $backups_max_qty,
+      }
+    ),
+  }
+
+  cron { 'confluence home backup':
+    command => $confluence_backup,
+    *       => $cron_params,
   }
 }

@@ -1,1 +1,7 @@
---- {}
+---
+profile_confluence::db_name: "confdb"
+profile_confluence::db_user: "confdb_user"
+profile_confluence::db_password: ~
+profile_confluence::confluence_home: "/srv/confluence/home"
+profile_confluence::backup_dir: "/backups"
+profile_confluence::backups_max_qty: 15
