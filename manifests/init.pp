@@ -85,7 +85,7 @@ class profile_confluence (
   }
   file { $exceptions:
     ensure  => 'file',
-    content => epp("${exceptions}.epp", {'cidr_list' => $maintenance_allowed_ips}),
+    content => epp("${module_name}/${exceptions}.epp", {'cidr_list' => $maintenance_allowed_ips}),
   }
 
 
