@@ -14,6 +14,9 @@
 #
 # @param backups_max_qty Keep this many backups
 #
+# @param maintenance_allowed_ips Array of IPs allowed to access Confluence while in
+#                                maintenance mode
+#
 # @example
 #   include profile_confluence
 class profile_confluence (
@@ -23,6 +26,7 @@ class profile_confluence (
   String  $confluence_home,
   String  $backup_dir,
   Integer $backups_max_qty,
+  Array   $maintenance_allowed_ips,
 ) {
   $cron_params = {
     hour   => 4,
@@ -63,6 +67,26 @@ class profile_confluence (
   postgresql::server::schema { 'confluence':
     db => $db_name,
   }
+
+  ### Maintenance setup
+  # 503 downtime announcement
+  $maint_html = '/var/www/html/maint.html'
+  file { $maint_html:
+    ensure => 'file',
+    source => "puppet:///modules/${module_name}${maint_html}",
+  }
+
+  # IPs allowed to bypass maintenance mode
+  $maint_dir = '/var/www/maintenance'
+  $exceptions = "${maint_dir}/exceptions.map"
+  file { $maint_dir:
+    ensure => 'directory',
+  }
+  file { $exceptions:
+    ensure  => 'file',
+    content => epp("${exceptions}.epp", {'cidr_list' => $maintenance_allowed_ips}),
+  }
+
 
   # ### Backups
   # $bkup_script = '/root/cron_scripts/confluence-backup.sh'
