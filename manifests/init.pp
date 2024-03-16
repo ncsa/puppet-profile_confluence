@@ -48,8 +48,8 @@ class profile_confluence (
 
   postgresql::server::database { $db_name :
     comment  => 'Confluence',
-    encoding => 'utf8',
-    locale   => 'utf8',
+    locale   => 'en_US.UTF-8',
+    #encoding => 'UTF8',
   }
 
   $pwdhash = postgresql::postgresql_password( $db_user, $db_password )
