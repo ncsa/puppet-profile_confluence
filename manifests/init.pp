@@ -16,6 +16,12 @@
 #
 # @param maintenance_allowed_ips Array of IPs allowed to access Confluence while in
 #                                maintenance mode
+# @param enable_cron_restart Boolean - Enable or disable the cronjob to
+#        periodically restart the Confluence service.
+#        Default: False
+#
+# @param cron_restart_params Hash, when to schedule the Confluence restart cron,
+#        must be valid parameters to the Puppet Cron Resource
 #
 # @example
 #   include profile_confluence
@@ -27,6 +33,8 @@ class profile_confluence (
   String  $backup_dir,
   Integer $backups_max_qty,
   Array   $maintenance_allowed_ips,
+  Boolean $enable_cron_restart,
+  Hash    $cron_restart_params,
 ) {
   $cron_params = {
     hour   => 4,
@@ -47,8 +55,8 @@ class profile_confluence (
   }
 
   postgresql::server::database { $db_name :
-    comment  => 'Confluence',
-    locale   => 'en_US.UTF-8',
+    comment => 'Confluence',
+    locale  => 'en_US.UTF-8',
     #encoding => 'UTF8',
   }
 
@@ -85,9 +93,17 @@ class profile_confluence (
   }
   file { $exceptions:
     ensure  => 'file',
-    content => epp("${module_name}/${exceptions}.epp", {'cidr_list' => $maintenance_allowed_ips}),
+    content => epp("${module_name}/${exceptions}.epp", { 'cidr_list' => $maintenance_allowed_ips }),
   }
 
+  # Enable scheduled service restarts
+  if $enable_cron_restart {
+    cron { 'Restart the confluence service periodically' :
+      command => '/usr/bin/systemctl restart confluence',
+      user    => root,
+      *       => $cron_restart_params,
+    }
+  }
 
   # ### Backups
   # $bkup_script = '/root/cron_scripts/confluence-backup.sh'

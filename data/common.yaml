@@ -5,3 +5,9 @@ profile_confluence::confluence_home: '/srv/confluence/home'
 profile_confluence::backup_dir: '/backups'
 profile_confluence::backups_max_qty: 15
 profile_confluence::maintenance_allowed_ips: []
+profile_confluence::enable_cron_restart: false
+profile_confluence::cron_restart_params: {
+  hour: 3,
+  minute: 45,
+  monthday: '*',
+}
