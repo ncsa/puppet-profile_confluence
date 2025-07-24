@@ -85,6 +85,12 @@ class profile_confluence (
     source => "puppet:///modules/${module_name}${maint_html}",
   }
 
+  $robots_txt = '/var/www/html/robots.txt'
+  file { $robots_txt:
+    ensure => 'file',
+    source => "puppet:///modules/${module_name}${robots_txt}",
+  }
+
   # IPs allowed to bypass maintenance mode
   $maint_dir = '/var/www/maintenance'
   $exceptions = "${maint_dir}/exceptions.map"
